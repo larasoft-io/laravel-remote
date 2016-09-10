@@ -30,9 +30,9 @@ That's it.
 
 Currently, you can hit following routes from Laravel Remote Dashboard to manage your Apps.
 ``` php
-/laravel-remote/status
-/laravel-remote/up
-/laravel-remote/down
+/status
+/up
+/down
 ```
 
 ## Change log
