@@ -21,7 +21,7 @@ class LaravelRemoteController extends Controller
 //        }
 //    }
 
-    public function testConnection(){
+    public function getStatus(){
         if(app()->isDownForMaintenance()){
             return \Response::json(['status' => 'down']);
 

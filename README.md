@@ -28,9 +28,11 @@ That's it.
 
 ## Usage
 
+Currently, you can hit following routes from Laravel Remote Dashboard to manage your Apps.
 ``` php
-$skeleton = new League\Skeleton();
-echo $skeleton->echoPhrase('Hello, League!');
+/laravel-remote/status
+/laravel-remote/up
+/laravel-remote/down
 ```
 
 ## Change log
