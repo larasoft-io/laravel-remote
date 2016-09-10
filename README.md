@@ -16,6 +16,15 @@ Via Composer
 ``` bash
 $ composer require larasoft/laravelRemote
 ```
+Add "\Larasoft\LaravelRemote\LaravelRemoteServiceProvider::class" in providers array of "config/app.php".
+
+Run "php artisan vendor:publish" in project root to publish config files and middleware.
+
+Replace "\Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode::class" with "LaravelRemoteCheckForMaintenanceMode::class"
+
+In "config/remote.php", replace 'LARAVEL_REMOTE_KEY' with your generated key in Laravel Remote Dashboard.
+
+That's it.
 
 ## Usage
 
