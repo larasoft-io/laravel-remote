@@ -1,5 +1,5 @@
 {
-    "name": "larasoft/laravelRemote",
+    "name": "larasoft/laravel-remote",
     "type": "library",
     "description": "Manage your Laravel Applications remotely.",
     "keywords": [
