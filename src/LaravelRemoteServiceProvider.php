@@ -13,8 +13,16 @@ class LaravelRemoteServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        $this->publishes([
+            __DIR__.'/config/remote.php' => config_path('remote.php'),
+        ]);
+
+        $this->publishes([
+            __DIR__ . '/Http/Middleware/LaravelRemoteCheckForMaintenanceMode.php' => app_path('Http/Middleware'),
+        ]);
+
         include __DIR__.'/Http/routes.php';
-        
+
         include __DIR__.'/Http/Middleware/LaravelRemoteCheckForMaintenanceMode.php';
     }
 
@@ -25,17 +33,16 @@ class LaravelRemoteServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->publishes([
-            __DIR__ . '/config/remote.php' => base_path('config'),
-        ]);
+//        $this->publishes([
+//            __DIR__ . '/config/remote.php' => config_path('remote.php'),
+//        ]);
+//
+//        $this->publishes([
+//             __DIR__ . '/Http/Middleware/LaravelRemoteCheckForMaintenanceMode.php' => app_path('Http/Middleware'),
+//         ]);
 
-        $this->publishes([
-             __DIR__ . '/Http/Middleware/LaravelRemoteCheckForMaintenanceMode.php' => app_path('Http/Middleware'),
-         ]);
-
-
-//        $this->mergeConfigFrom(
-//            __DIR__.'/config/remote.php', 'remote'
-//        );
+        $this->mergeConfigFrom(
+            __DIR__.'/config/remote.php', config_path('remote.php')
+        );
     }
 }

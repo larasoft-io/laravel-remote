@@ -14,7 +14,8 @@
         {
             "name": "Larasoft.io",
             "email": "rock.star9722@gmail.com",
-            "homepage": "https://larasoft.io/"
+            "homepage": "https://larasoft.io/",
+            "role": "Developer"
         }
     ],
     "require": {
