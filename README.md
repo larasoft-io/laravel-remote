@@ -14,7 +14,7 @@ Laravel Remote supports Laravel 5.* currently.
 Via Composer
 
 ``` bash
-$ composer require larasoft/laravel-remote
+$ composer require larasoft/laravel-remote dev-master
 ```
 Add "\Larasoft\LaravelRemote\LaravelRemoteServiceProvider::class" in providers array of "config/app.php".
 
