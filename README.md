@@ -20,7 +20,7 @@ Add "\Larasoft\LaravelRemote\LaravelRemoteServiceProvider::class" in providers a
 
 Run "php artisan vendor:publish" in project root to publish config files and middleware.
 
-Replace "\Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode::class" with "LaravelRemoteCheckForMaintenanceMode::class"
+In "app/Http/Kernel.php, replace "\Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode::class" with "LaravelRemoteCheckForMaintenanceMode::class" in "$middleware" array.
 
 In "config/remote.php", replace 'LARAVEL_REMOTE_KEY' with your generated key in Laravel Remote Dashboard.
 
