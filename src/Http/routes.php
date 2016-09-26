@@ -2,7 +2,7 @@
 
     // Test the connection with Laravel Remote
     Route::get(
-        'laravel-remote/status',
+        'laravel-remote/status/check',
         '\Larasoft\LaravelRemote\Http\Controllers\LaravelRemoteController@getStatus'
     );
 
