@@ -28,9 +28,9 @@ That's it.
 
 ## Usage
 
-Currently, you can hit following routes from Laravel Remote Dashboard to manage your Apps.
+Currently, following routes get hits from Laravel Remote Dashboard to manage your Apps.
 ``` php
-/status
+/status/check
 /up
 /down
 ```
