@@ -31,6 +31,7 @@ class LaravelRemoteController extends Controller
     }
 
     public function executeCommand($command){
+        
         if($command == 'up'){
             Artisan::call('up');
             return \Response::json(['status' => 'up']);
@@ -39,5 +40,31 @@ class LaravelRemoteController extends Controller
             Artisan::call('down');
             return \Response::json(['status' => 'down']);
         }
+    }
+
+    public function getEnvVariables(){
+        $vars = $this->envToArray(base_path('.env'));
+
+        $data = [];
+
+        foreach ($vars as $key => $var){
+            array_push($data, ['name' => $key, 'value' => $var]);
+        }
+
+        return $data;
+    }
+
+    protected function envToArray($file){
+        $string = file_get_contents($file);
+        $string = preg_split('/\n+/', $string);
+        $returnArray = array();
+        foreach($string as $one){
+            if (preg_match('/^(#\s)/', $one) === 1) {
+                continue;
+            }
+            $entry = explode("=", $one, 2);
+            $returnArray[$entry[0]] = isset($entry[1]) ? $entry[1] : null;
+        }
+        return $returnArray;
     }
 }
