@@ -5,41 +5,60 @@ namespace Larasoft\LaravelRemote\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Http\Requests;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\File;
 
 class LaravelRemoteController extends Controller
 {
-//    protected $key_is_valid;
-//    
-//    public function __construct()
-//    {
-//        if(config('remote.key')){
-//            $key_is_valid = true;
-//        }else{
-//            $key_is_valid = false;
-//        }
-//    }
-
-    public function getStatus(){
-        if(app()->isDownForMaintenance()){
-            return \Response::json(['status' => 'down']);
-
-        }else{
-            return \Response::json(['status' => 'up']);
-        }
+    protected $laravel_remote_key;
+    
+    public function __construct(Request $request)
+    {
+        $this->laravel_remote_key = config('remote.key');
     }
 
-    public function executeCommand($command){
-        
-        if($command == 'up'){
-            Artisan::call('up');
-            return \Response::json(['status' => 'up']);
+    public function getStatus(Request $request)
+    {
+        if ( $this->checkLaravelRemoteKey($request) )
+        {
+            if ( app()->isDownForMaintenance() )
+            {
+                return \Response::json(['status' => 'down', 'success' => 1]);
+            }
+            else
+            {
+                return \Response::json(['status' => 'up', 'success' => 1]);
+            }
         }
-        else if($command == 'down'){
-            Artisan::call('down');
-            return \Response::json(['status' => 'down']);
+        else
+        {
+            return \Response::json(['success' => 0, 'message' => 'Invalid Laravel Remote Key!']);
+        }
+    
+    }
+
+    public function executeCommand($command, Request $request)
+    {
+        if ( $this->checkLaravelRemoteKey($request) )
+        {
+            if ( $command == 'up' )
+            {
+                Artisan::call('up');
+
+                return \Response::json(['status' => 'up', 'success' => 1]);
+            }
+            else
+            {
+                if ( $command == 'down' )
+                {
+                    Artisan::call('down');
+
+                    return \Response::json(['status' => 'down', 'success' => 1]);
+                }
+            }
+        }
+        else{
+            return response()->json(['success' => 0, 'message' => 'Invalid Laravel Remote Key!']);
         }
     }
 
@@ -56,27 +75,70 @@ class LaravelRemoteController extends Controller
     }
 
     public function updateEnvVariable(Request $request){
-        $this->changeEnv([$request->name => $request->value]);
+        if($request->name == 'LARAVEL_REMOTE_KEY')
+        {
+            $this->changeEnv([$request->name => $request->value]);
+            return response()->json(['success' => 1]);
+        }
+        else{
+            if ( $this->checkLaravelRemoteKey($request) )
+            {
+                $this->changeEnv([$request->name => $request->value]);
+                return response()->json(['success' => 1]);
+            }
+            else
+            {
+                return response()->json(['success' => 0, 'message' => 'Invalid Laravel Remote Key!']);
+            }
+        }
     }
     
     public function storeEnvVariable(Request $request){
-        $line = PHP_EOL."{$request->name}={$request->value}";
-
-        $bytesWritten = File::append(base_path('.env'), $line);
-        if ($bytesWritten === false)
+        if($request->name == 'LARAVEL_REMOTE_KEY')
         {
-            return response()->json(['success' => 0]);
-        }
-        else{
-            return response()->json(['success' => 1]);
+            $line = PHP_EOL . "{$request->name}={$request->value}";
+
+            $bytesWritten = File::append(base_path('.env'), $line);
+            if ( $bytesWritten === false )
+            {
+                return response()->json(['success' => 0, 'message' => 'Some error occurred while updating .env']);
+            }
+            else
+            {
+                return response()->json(['success' => 1]);
+            }
+        }else{
+            if ( $this->checkLaravelRemoteKey($request) )
+            {
+                $line = PHP_EOL . "{$request->name}={$request->value}";
+
+                $bytesWritten = File::append(base_path('.env'), $line);
+                if ( $bytesWritten === false )
+                {
+                    return response()->json(['success' => 0, 'message' => 'Some error occurred while updating .env']);
+                }
+                else
+                {
+                    return response()->json(['success' => 1]);
+                }
+            }
+            else
+            {
+                return response()->json(['success' => 0, 'message' => 'Invalid Laravel Remote Key!']);
+            }
         }
     }
     
     public function deleteEnvVariable(Request $request)
     {
-        $this->removeFromEnv($request->name);
+        if ( $this->checkLaravelRemoteKey($request) )
+        {
+            $this->removeFromEnv($request->name);
 
-        return response()->json(['success' => 1]);
+            return response()->json(['success' => 1]);
+        }else{
+            return response()->json(['success' => 0, 'message' => 'Invalid Laravel Remote Key!']);
+        }
     }
 
     protected function changeEnv($data = array()){
@@ -172,5 +234,14 @@ class LaravelRemoteController extends Controller
             $returnArray[$entry[0]] = isset($entry[1]) ? $entry[1] : null;
         }
         return $returnArray;
+    }
+
+    /**
+     * @param Request $request
+     * @return bool
+     */
+    public function checkLaravelRemoteKey(Request $request)
+    {
+        return $this->laravel_remote_key == $request->header('token');
     }
 }
