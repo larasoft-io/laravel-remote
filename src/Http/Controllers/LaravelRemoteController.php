@@ -58,6 +58,26 @@ class LaravelRemoteController extends Controller
     public function updateEnvVariable(Request $request){
         $this->changeEnv([$request->name => $request->value]);
     }
+    
+    public function storeEnvVariable(Request $request){
+        $line = PHP_EOL."{$request->name}={$request->value}";
+
+        $bytesWritten = File::append(base_path('.env'), $line);
+        if ($bytesWritten === false)
+        {
+            return response()->json(['success' => 0]);
+        }
+        else{
+            return response()->json(['success' => 1]);
+        }
+    }
+    
+    public function deleteEnvVariable(Request $request)
+    {
+        $this->removeFromEnv($request->name);
+
+        return response()->json(['success' => 1]);
+    }
 
     protected function changeEnv($data = array()){
         if(count($data) > 0){
@@ -100,6 +120,45 @@ class LaravelRemoteController extends Controller
             return false;
         }
     }
+
+    protected function removeFromEnv($name){
+        if(isset($name)){
+
+            // Read .env-file
+            $env = file_get_contents(base_path() . '/.env');
+
+            // Split string on every " " and write into array
+            $env = preg_split('/\s+/', $env);;
+
+            // Loop through .env-data
+            foreach($env as $env_key => $env_value){
+
+                // Turn the value into an array and stop after the first split
+                // So it's not possible to split e.g. the App-Key by accident
+                $entry = explode("=", $env_value, 2);
+
+                // Check, if key/name to remove fits the actual .env-key
+                if($entry[0] == $name){
+                    // If yes, remove it
+                    unset($env[$env_key]);
+                } else {
+                    // If not, keep the old one
+                    $env[$env_key] = $env_value;
+                }
+            }
+
+            // Turn the array back to an String
+            $env = implode("\n", $env);
+
+            // And overwrite the .env with the new data
+            file_put_contents(base_path() . '/.env', $env);
+
+            return true;
+        } else {
+            return false;
+        }
+    }
+
 
     protected function envToArray($file){
         $string = file_get_contents($file);
