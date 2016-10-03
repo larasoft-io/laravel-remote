@@ -47,14 +47,15 @@ class LaravelRemoteController extends Controller
 
                 return \Response::json(['status' => 'up', 'success' => 1]);
             }
+            else if( $command == 'down' )
+            {
+                Artisan::call('down');
+
+                return \Response::json(['status' => 'down', 'success' => 1]);
+            }
             else
             {
-                if ( $command == 'down' )
-                {
-                    Artisan::call('down');
-
-                    return \Response::json(['status' => 'down', 'success' => 1]);
-                }
+                Artisan::call($command);
             }
         }
         else{
