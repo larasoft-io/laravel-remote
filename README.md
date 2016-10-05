@@ -16,7 +16,7 @@ Via Composer
 ``` bash
 $ composer require larasoft/laravel-remote dev-master
 ```
-Add "\Larasoft\LaravelRemote\LaravelRemoteServiceProvider::class" in providers array of "config/app.php".
+Add "\Larasoft\LaravelRemote\LaravelRemoteServiceProvider::class" and "Spatie\Backup\BackupServiceProvider::class," in providers array of "config/app.php".
 
 Run "php artisan vendor:publish" in project root to publish config files and middleware.
 
@@ -24,15 +24,27 @@ In "app/Http/Kernel.php, replace "\Illuminate\Foundation\Http\Middleware\CheckFo
 
 In "config/remote.php", replace 'LARAVEL_REMOTE_KEY' with your generated key in Laravel Remote Dashboard.
 
+Configure your config/database.php as follows to enable Backups of your database.
+
+```
+'connections' => [
+	'mysql' => [
+		'dump_command_path' => '/path/to/the/binary', // only the path, so without 'mysqldump' or 'pg_dump'
+		'dump_command_timeout' => 60 * 5, // 5 minute timeout
+		'dump_using_single_transaction' => true, // perform dump using a single transaction
+		'driver'    => 'mysql',
+		...
+	],
+```
+For more information regarding Database backups visit: https://docs.spatie.be/laravel-backup/v3/introduction
+
 That's it.
 
 ## Usage
 
 Currently, following routes get hits from Laravel Remote Dashboard to manage your Apps.
 ``` php
-/status/check
-/up
-/down
+Use LaravelRemote Dashboard to manage your all applications. 
 ```
 
 ## Change log

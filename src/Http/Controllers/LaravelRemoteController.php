@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Log;
 
 class LaravelRemoteController extends Controller
 {
@@ -49,12 +50,13 @@ class LaravelRemoteController extends Controller
             }
             else if( $command == 'down' )
             {
-                Artisan::call('down');
+                    Artisan::call('down');
 
-                return \Response::json(['status' => 'down', 'success' => 1]);
+                    return \Response::json(['status' => 'down', 'success' => 1]);
             }
             else
             {
+                Log::info($command);
                 Artisan::call($command);
             }
         }
