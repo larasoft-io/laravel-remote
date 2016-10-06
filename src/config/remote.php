@@ -2,6 +2,6 @@
 
 return [
     
-    'key' => 'LARAVEL_REMOTE_KEY'
+    'key' => env('LARAVEL_REMOTE_KEY')
     
 ];
