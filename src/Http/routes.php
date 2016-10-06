@@ -26,6 +26,21 @@
         '\Larasoft\LaravelRemote\Http\Controllers\LaravelRemoteController@deleteEnvVariable'
     );
 
+    Route::get(
+        'laravel-remote/backups',
+        '\Larasoft\LaravelRemote\Http\Controllers\LaravelRemoteController@backups'
+    );
+
+    Route::get(
+        'laravel-remote/backups/{name}/download',
+        '\Larasoft\LaravelRemote\Http\Controllers\LaravelRemoteController@downloadBackup'
+    );
+
+    Route::post(
+        'laravel-remote/backups/{name}/delete',
+        '\Larasoft\LaravelRemote\Http\Controllers\LaravelRemoteController@deleteBackup'
+    );
+
     // Execute commands received from Laravel Remote
     Route::get(
         'laravel-remote/{command}',

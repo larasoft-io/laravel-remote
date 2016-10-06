@@ -56,7 +56,6 @@ class LaravelRemoteController extends Controller
             }
             else
             {
-                Log::info($command);
                 Artisan::call($command);
             }
         }
@@ -65,6 +64,68 @@ class LaravelRemoteController extends Controller
         }
     }
 
+    /*
+     * Get all Backups
+     */
+    public function backups(Request $request){
+        if ( $this->checkLaravelRemoteKey($request) )
+        {
+            $links = [];
+            $backup_dir_name = config('laravel-backup.backup.name');
+
+            $files = File::allFiles(storage_path("app/{$backup_dir_name}"));
+    
+            foreach ($files as $file){
+                array_push($links, [
+                    'name' => basename($file), 
+                    'download_path' => url('laravel-remote/backups/'.basename($file).'/download'),
+                    'delete_path' => url('laravel-remote/backups/'.basename($file).'/delete')
+                ]);
+            }
+
+            return response()->json(['success' => 1, 'backups' => $links]);
+        }
+        else{
+            return response()->json(['success' => 0, 'message' => 'Invalid Laravel Remote Key!']);
+        }
+    }
+    
+    /*
+     * Download a specific Backup
+     */
+    public function downloadBackup($name){
+        if ( $this->checkLaravelRemoteKey(request()) )
+        {
+            $backup_dir_name = config('laravel-backup.backup.name');
+            $file = storage_path("app/{$backup_dir_name}/{$name}");
+    
+            return response()->download($file);
+        }
+        else{
+            return 'Unauthorised Access! Please contact administrator.';
+        }
+    }
+    
+    /*
+     * Delete a specific Backup
+     */
+    public function deleteBackup($name){
+        if ( $this->checkLaravelRemoteKey(request()) )
+        {
+            $backup_dir_name = config('laravel-backup.backup.name');
+            $file = storage_path("app/{$backup_dir_name}/{$name}");
+    
+            if(File::exists($file)){
+                File::delete($file);
+            }
+
+            return response()->json(['success' => 1]);
+        }
+        else{
+            return response()->json(['success' => 0, 'message' => 'Invalid Laravel Remote Key!']);
+        }
+    }
+    
     public function getEnvVariables(){
         $vars = $this->envToArray(base_path('.env'));
 
@@ -224,7 +285,6 @@ class LaravelRemoteController extends Controller
         }
     }
 
-
     protected function envToArray($file){
         $string = file_get_contents($file);
         $string = preg_split('/\n+/', $string);
@@ -245,6 +305,12 @@ class LaravelRemoteController extends Controller
      */
     public function checkLaravelRemoteKey(Request $request)
     {
-        return $this->laravel_remote_key == $request->header('token');
+        if($request->header('token'))
+        {
+            return $this->laravel_remote_key == $request->header('token');
+        }
+        else{
+            return $this->laravel_remote_key == $request->token;
+        }
     }
 }
