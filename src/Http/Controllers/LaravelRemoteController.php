@@ -60,9 +60,11 @@ class LaravelRemoteController extends Controller
             {
                 Artisan::call($command);
             }
+
+            return response(200);
         }
         else{
-            return response()->json(['success' => 0, 'message' => 'Invalid Laravel Remote Key!']);
+            return response(500)->json(['success' => 0, 'message' => 'Invalid Laravel Remote Key!']);
         }
     }
 

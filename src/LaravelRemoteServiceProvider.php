@@ -16,12 +16,12 @@ class LaravelRemoteServiceProvider extends ServiceProvider
         include __DIR__.'/Http/routes.php';
 
         $this->publishes([
-             __DIR__ . '/config/remote.php' => config_path('remote.php'),
-         ]);
+                             __DIR__ . '/config/remote.php' => config_path('remote.php'),
+                         ]);
 
         $this->publishes([
-             __DIR__ . '/Http/Middleware/LaravelRemoteCheckForMaintenanceMode.php' => app_path('Http/Middleware/LaravelRemoteCheckForMaintenanceMode.php'),
-         ]);
+                             __DIR__ . '/Http/Middleware/LaravelRemoteCheckForMaintenanceMode.php' => app_path('Http/Middleware/LaravelRemoteCheckForMaintenanceMode.php'),
+                         ]);
 
 
         include __DIR__.'/Http/Middleware/LaravelRemoteCheckForMaintenanceMode.php';
