@@ -64,7 +64,7 @@ class LaravelRemoteController extends Controller
             return response(200);
         }
         else{
-            return response(500)->json(['success' => 0, 'message' => 'Invalid Laravel Remote Key!']);
+            return response()->json(['success' => 0, 'message' => 'Invalid Laravel Remote Key!']);
         }
     }
 
