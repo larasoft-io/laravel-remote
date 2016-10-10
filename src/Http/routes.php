@@ -7,6 +7,16 @@
     );
 
     Route::get(
+        'laravel-remote/env/raw',
+        '\Larasoft\LaravelRemote\Http\Controllers\LaravelRemoteController@getRawEnvFile'
+    );
+
+    Route::post(
+        'laravel-remote/env/raw',
+        '\Larasoft\LaravelRemote\Http\Controllers\LaravelRemoteController@saveRawEnvFile'
+    );
+
+    Route::get(
         'laravel-remote/env/variables',
         '\Larasoft\LaravelRemote\Http\Controllers\LaravelRemoteController@getEnvVariables'
     );

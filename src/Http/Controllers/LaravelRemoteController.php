@@ -139,6 +139,22 @@ class LaravelRemoteController extends Controller
         return $data;
     }
 
+    public function getRawEnvFile(){
+        return file_get_contents(base_path('.env'));
+    }
+
+    public function saveRawEnvFile(Request $request){
+        if ( $this->checkLaravelRemoteKey(request()) )
+        {
+            file_put_contents(base_path('.env'), $request->raw);
+
+            return response()->json(['success' => 1]);
+        }
+        else{
+            return response()->json(['success' => 0, 'message' => 'Invalid Laravel Remote Key!']);
+        }
+    }
+
     public function updateEnvVariable(Request $request){
         if($request->name == 'LARAVEL_REMOTE_KEY')
         {
