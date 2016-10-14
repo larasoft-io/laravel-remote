@@ -128,19 +128,31 @@ class LaravelRemoteController extends Controller
     }
 
     public function getEnvVariables(){
-        $vars = $this->envToArray(base_path('.env'));
+        if ( $this->checkLaravelRemoteKey(request()) )
+        {
+            $vars = $this->envToArray(base_path('.env'));
 
-        $data = [];
+            $data = [];
 
-        foreach ($vars as $key => $var){
-            array_push($data, ['name' => $key, 'value' => $var]);
+            foreach ($vars as $key => $var){
+                array_push($data, ['name' => $key, 'value' => $var]);
+            }
+
+            return response()->json(['success' => 1, 'variables' => $data]);
         }
-
-        return $data;
+        else{
+            return response()->json(['success' => 0, 'message' => 'Invalid Laravel Remote Key!']);
+        }
     }
 
     public function getRawEnvFile(){
-        return file_get_contents(base_path('.env'));
+        if ( $this->checkLaravelRemoteKey(request()) )
+        {
+            return response()->json(['success' => 1, 'raw' => file_get_contents(base_path('.env'))]);
+        }
+        else{
+            return response()->json(['success' => 0, 'message' => 'Invalid Laravel Remote Key!']);
+        }
     }
 
     public function saveRawEnvFile(Request $request){
