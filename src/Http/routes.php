@@ -1,5 +1,10 @@
 <?php
 
+    Route::get(
+        'laravel-remote/version',
+        '\Larasoft\LaravelRemote\Http\Controllers\LaravelRemoteController@getLaravelVersion'
+    );
+
     // Test the connection with Laravel Remote
     Route::get(
         'laravel-remote/status/check',

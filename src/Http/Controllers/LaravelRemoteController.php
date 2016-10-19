@@ -327,6 +327,20 @@ class LaravelRemoteController extends Controller
         }
         return $returnArray;
     }
+    
+    public function getLaravelVersion(Request $request){
+        if ( $this->checkLaravelRemoteKey($request) )
+        {
+            $laravel = app();
+            $version = $laravel::VERSION;
+            
+            return response()->json(['success' => 1, 'version' => $version]);
+        }
+        else
+        {
+            return response()->json(['success' => 0, 'message' => 'Invalid Laravel Remote Key!']);
+        }
+    }
 
     /**
      * @param Request $request
