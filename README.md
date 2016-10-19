@@ -26,7 +26,12 @@ Run "php artisan vendor:publish" in project root to publish config files and mid
 In "app/Http/Kernel.php, replace "\Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode::class" with "LaravelRemoteCheckForMaintenanceMode::class" in "$middleware" array.
 
 In "config/remote.php", replace 'LARAVEL_REMOTE_KEY' with your generated key in Laravel Remote Dashboard.
-
+``` php
+return [
+    'key' => env('LARAVEL_REMOTE_KEY'),
+    'url' => env('LARAVEL_REMOTE_URL')
+];
+```
 
 ### Step 2 (Required for Database Backups feature)
 
@@ -47,6 +52,12 @@ For more information regarding Database backups visit: https://docs.spatie.be/la
 ### Step 3 (Required for Failed Job Notification feature)
 
 In "config/remote.php", replace 'LARAVEL_REMOTE_URL' with base URL of Laravel Remote Dashboard (without trailing /). e.g: http://laravel-remote.com
+``` php
+return [
+    'key' => env('LARAVEL_REMOTE_KEY'),
+    'url' => env('LARAVEL_REMOTE_URL')
+];
+```
 
 Add following entry in $listen array of App\Providers\EventServiceProvider.
 ``` php
@@ -74,10 +85,7 @@ That's it.
 
 ## Usage
 
-Currently, following routes get hits from Laravel Remote Dashboard to manage your Apps.
-``` php
-Use LaravelRemote Dashboard to manage your all applications. 
-```
+Use Laravel Remote Dashboard to manage your Apps. Enjoy!
 
 ## Change log
 
