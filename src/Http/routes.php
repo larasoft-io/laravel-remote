@@ -5,6 +5,11 @@
         '\Larasoft\LaravelRemote\Http\Controllers\LaravelRemoteController@getLaravelVersion'
     );
 
+    Route::get(
+        'laravel-remote/jobs',
+        '\Larasoft\LaravelRemote\Http\Controllers\LaravelRemoteController@getJobNames'
+    );
+
     // Test the connection with Laravel Remote
     Route::get(
         'laravel-remote/status/check',

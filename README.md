@@ -20,9 +20,15 @@ Add "\Larasoft\LaravelRemote\LaravelRemoteServiceProvider::class" and "Spatie\Ba
 
 Run "php artisan vendor:publish" in project root to publish config files and middleware.
 
+## Configure
+
+### Step 1 (Required)
 In "app/Http/Kernel.php, replace "\Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode::class" with "LaravelRemoteCheckForMaintenanceMode::class" in "$middleware" array.
 
 In "config/remote.php", replace 'LARAVEL_REMOTE_KEY' with your generated key in Laravel Remote Dashboard.
+
+
+### Step 2 (Required for Database Backups feature)
 
 Configure your config/database.php as follows to enable Backups of your database.
 
@@ -37,6 +43,32 @@ Configure your config/database.php as follows to enable Backups of your database
 	],
 ```
 For more information regarding Database backups visit: https://docs.spatie.be/laravel-backup/v3/introduction
+
+### Step 3 (Required for Failed Job Notification feature)
+
+In "config/remote.php", replace 'LARAVEL_REMOTE_URL' with base URL of Laravel Remote Dashboard (without trailing /). e.g: http://laravel-remote.com
+
+Add following entry in $listen array of App\Providers\EventServiceProvider.
+``` php
+protected $listen = [
+    LaravelRemoteJobFailed::class => [
+        ListenLaravelRemoteJobFailed::class,
+    ],
+    ...
+];
+```
+
+Override failed() method in your job classes i.e. in app/Jobs directory as follows.
+``` php
+    public function failed()
+    {
+        $data = ['job' => class_basename($this)];
+        event(new LaravelRemoteJobFailed($data));
+        
+        ...
+    }
+```
+
 
 That's it.
 

@@ -341,6 +341,27 @@ class LaravelRemoteController extends Controller
             return response()->json(['success' => 0, 'message' => 'Invalid Laravel Remote Key!']);
         }
     }
+    
+    public function getJobNames(Request $request){
+        if ( $this->checkLaravelRemoteKey($request) )
+        {
+            $file_names = [];
+            $dir = app_path('Jobs');
+            $filesInFolder = \File::files($dir);
+
+            foreach($filesInFolder as $path)
+            {
+                $file_names[] = pathinfo($path);
+            }
+            
+            return response()->json(['success' => 1, 'jobs' => $file_names]);
+        }
+        else
+        {
+            return response()->json(['success' => 0, 'message' => 'Invalid Laravel Remote Key!']);
+        }
+        
+    }
 
     /**
      * @param Request $request
