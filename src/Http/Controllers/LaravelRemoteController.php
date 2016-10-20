@@ -20,22 +20,22 @@ class LaravelRemoteController extends Controller
         $this->backup_dir_name = preg_replace("/[^A-Za-z0-9 ]/", '-', config('laravel-backup.backup.name'));
     }
 
-    public function getStatus(Request $request)
+    public function checkConnection(Request $request)
     {
         if ( $this->checkLaravelRemoteKey($request) )
         {
             if ( app()->isDownForMaintenance() )
             {
-                return \Response::json(['status' => 'down', 'success' => 1]);
+                return \Response::json(['connection' => 0, 'success' => 1]);
             }
             else
             {
-                return \Response::json(['status' => 'up', 'success' => 1]);
+                return \Response::json(['connection' => 1, 'success' => 1]);
             }
         }
         else
         {
-            return \Response::json(['success' => 0, 'message' => 'Invalid Laravel Remote Key!']);
+            return \Response::json(['success' => 0, 'connection' => 0, 'message' => 'Invalid Laravel Remote Key!']);
         }
 
     }
