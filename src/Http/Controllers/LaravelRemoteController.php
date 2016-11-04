@@ -86,7 +86,7 @@ class LaravelRemoteController extends Controller
                 ]);
             }
 
-            return response()->json(['success' => 1, 'backups' => $links]);
+            return response()->json(['success' => 1, 'backups' => array_reverse($links)]);
         }
         else{
             return response()->json(['success' => 0, 'message' => 'Invalid Laravel Remote Key!']);
