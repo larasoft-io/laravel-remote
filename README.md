@@ -16,7 +16,17 @@ Via Composer
 ``` bash
 $ composer require larasoft/laravel-remote dev-master
 ```
-Add "\Larasoft\LaravelRemote\LaravelRemoteServiceProvider::class" and "Spatie\Backup\BackupServiceProvider::class," in providers array of "config/app.php".
+
+Add following two providers in providers array of "config/app.php".
+
+``` php
+'providers' => [
+    ...
+    \Larasoft\LaravelRemote\LaravelRemoteServiceProvider::class,
+    Spatie\Backup\BackupServiceProvider::class,
+    
+    ];
+```
 
 Run "php artisan vendor:publish" in project root to publish config files and middleware.
 
