@@ -23,8 +23,6 @@ class LaravelRemoteServiceProvider extends ServiceProvider
                              __DIR__ . '/Http/Middleware/LaravelRemoteCheckForMaintenanceMode.php' => app_path('Http/Middleware/LaravelRemoteCheckForMaintenanceMode.php'),
                          ]);
 
-
-        include __DIR__.'/Http/Middleware/LaravelRemoteCheckForMaintenanceMode.php';
     }
 
     /**
