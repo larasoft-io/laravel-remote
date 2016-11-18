@@ -328,13 +328,18 @@ class LaravelRemoteController extends Controller
         return $returnArray;
     }
     
-    public function getLaravelVersion(Request $request){
+    public function getVersion(Request $request){
         if ( $this->checkLaravelRemoteKey($request) )
         {
             $laravel = app();
-            $version = $laravel::VERSION;
+            $laravel_version = $laravel::VERSION;
+
+            $spark_version = null;
+            if(class_exists('Spark')){
+                $spark_version = app('Spark')::$version;
+            }
             
-            return response()->json(['success' => 1, 'version' => $version]);
+            return response()->json(['success' => 1, 'laravel_version' => $laravel_version, 'spark_version' => $spark_version]);
         }
         else
         {

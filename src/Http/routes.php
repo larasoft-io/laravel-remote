@@ -2,7 +2,7 @@
 
     Route::get(
         'laravel-remote/version',
-        '\Larasoft\LaravelRemote\Http\Controllers\LaravelRemoteController@getLaravelVersion'
+        '\Larasoft\LaravelRemote\Http\Controllers\LaravelRemoteController@getVersion'
     );
 
     Route::get(
