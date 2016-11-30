@@ -336,7 +336,10 @@ class LaravelRemoteController extends Controller
 
             $spark_version = null;
             if(class_exists('Spark')){
-                $spark_version = app('Spark')::$version;
+                $spark = new \ReflectionProperty('Spark', 'version');
+                $spark_version = $spark->getValue();
+
+//                $spark_version = app('Spark')::$version;
             }
             
             return response()->json(['success' => 1, 'laravel_version' => $laravel_version, 'spark_version' => $spark_version]);
